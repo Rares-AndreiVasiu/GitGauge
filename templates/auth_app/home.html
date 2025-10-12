@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto mt-8">
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center space-x-4 mb-6">
+            {% if user.social_auth.first.extra_data.avatar_url %}
+                <img src="{{ user.social_auth.first.extra_data.avatar_url }}" alt="Profile" class="w-16 h-16 rounded-full">
+            {% endif %}
+            <div>
+                <h1 class="text-2xl font-bold">Welcome, {{ user.username }}!</h1>
+                <p class="text-gray-600">You're successfully logged in with GitHub</p>
+            </div>
+        </div>
+
+        <div class="border-t pt-4">
+            <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <a href="{% url 'profile' %}" class="bg-gray-100 hover:bg-gray-200 p-4 rounded-lg text-center transition-colors">
+                    <span class="block font-medium">View Profile</span>
+                </a>
+                <a href="{% url 'repositories' %}" class="bg-gray-100 hover:bg-gray-200 p-4 rounded-lg text-center transition-colors">
+                    <span class="block font-medium">View Repositories</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

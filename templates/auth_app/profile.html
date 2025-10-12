@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Profile Card with dynamic sizing -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-102 transition-transform duration-200">
+            <div class="md:flex">
+                <!-- Profile Image Section -->
+                <div class="md:w-1/3 relative">
+                    {% if github_data.avatar_url %}
+                        <img src="{{ github_data.avatar_url }}"
+                             alt="Profile Picture"
+                             class="w-full h-full object-cover aspect-square">
+                    {% else %}
+                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <span class="text-gray-500">No Image</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Profile Info Section -->
+                <div class="md:w-2/3 p-6">
+                    <div class="mb-4">
+                        <h1 class="text-2xl font-bold text-gray-800">
+                            {{ github_data.name|default:github_data.login }}
+                        </h1>
+                        <p class="text-gray-600">@{{ github_data.login }}</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <span class="block text-sm text-gray-500">Followers</span>
+                            <span class="text-lg font-semibold">{{ github_data.followers }}</span>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <span class="block text-sm text-gray-500">Following</span>
+                            <span class="text-lg font-semibold">{{ github_data.following }}</span>
+                        </div>
+                    </div>
+
+                    {% if github_data.bio %}
+                    <div class="mb-4">
+                        <h2 class="text-sm font-semibold text-gray-700 mb-2">Bio</h2>
+                        <p class="text-gray-600">{{ github_data.bio }}</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="space-y-2">
+                        {% if github_data.company %}
+                        <div class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10.5 5.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"/>
+                                <path d="M14 6a4 4 0 0 1 4 4v1h-6.5v2H18v1.5a3.5 3.5 0 0 1-7 0V13h.5a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H11v1.5h.5a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1H7V9H5.5a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1H6v1.5a3.5 3.5 0 1 1-7 0V13h2.5v-2H0v-1a4 4 0 0 1 4-4h10Z"/>
+                            </svg>
+                            {{ github_data.company }}
+                        </div>
+                        {% endif %}
+                        {% if github_data.location %}
+                        <div class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 2a4 4 0 0 0-4 4v1H4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4zm3 5V6a3 3 0 1 0-6 0v1h6z"/>
+                            </svg>
+                            {{ github_data.location }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Public Repositories Section -->
+        <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold mb-4">Public Repositories: {{ github_data.public_repos }}</h2>
+            <a href="{% url 'repositories' %}"
+               class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+                View All Repositories
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
