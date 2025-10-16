@@ -89,7 +89,6 @@ def login(request):
     # No username provided - just render the search/login page
     return render(request, 'auth_app/login.html')
 
-@login_required
 def home(request):
     return render(request, 'auth_app/home.html')
 
