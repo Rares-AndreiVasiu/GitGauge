@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Profile{% endblock %}
+{% block title %}{% if search_username %}{{ github_data.login }}'s Profile{% else %}Profile{% endif %}{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-4xl mx-auto">
-        <!-- Profile Card with dynamic sizing -->
+        <!-- Profile Card -->
         <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-102 transition-transform duration-200">
             <div class="md:flex">
                 <!-- Profile Image Section -->
@@ -74,10 +74,49 @@
         <!-- Public Repositories Section -->
         <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-xl font-bold mb-4">Public Repositories: {{ github_data.public_repos }}</h2>
-            <a href="{% url 'repositories' %}"
-               class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+            {% if repositories %}
+            <div class="space-y-4">
+                {% for repo in repositories|slice:":5" %}
+                <div class="border rounded p-4 hover:bg-gray-50">
+                    <h3 class="font-semibold text-lg">
+                        <a href="{{ repo.html_url }}" target="_blank" class="text-blue-600 hover:underline">
+                            {{ repo.name }}
+                        </a>
+                    </h3>
+                    {% if repo.description %}
+                    <p class="text-gray-600 mt-1">{{ repo.description }}</p>
+                    {% endif %}
+                    <div class="mt-2 flex items-center space-x-4 text-sm text-gray-500">
+                        {% if repo.language %}
+                        <span>{{ repo.language }}</span>
+                        {% endif %}
+                        <span>⭐ {{ repo.stargazers_count }}</span>
+                        <span>🍴 {{ repo.forks_count }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if search_username %}
+            <a href="{% url 'repositories_search' %}?username={{ search_username }}"
+               class="inline-block mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
                 View All Repositories
             </a>
+            {% else %}
+            <a href="{% url 'repositories' %}"
+               class="inline-block mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+                View All Repositories
+            </a>
+            {% endif %}
+
+            {% if search_username %}
+            <div class="mt-4">
+                <a href="{% url 'login' %}" class="text-gray-600 hover:text-gray-800">
+                    ← Search another user
+                </a>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
