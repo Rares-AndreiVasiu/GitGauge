@@ -3,29 +3,121 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="max-w-lg mx-auto mt-8">
-    <div class="bg-white rounded-lg shadow p-6">
-        <div class="flex items-center space-x-4 mb-6">
-            {% if user.social_auth.first.extra_data.avatar_url %}
-                <img src="{{ user.social_auth.first.extra_data.avatar_url }}" alt="Profile" class="w-16 h-16 rounded-full">
-            {% endif %}
-            <div>
-                <h1 class="text-2xl font-bold">Welcome, {{ user.username }}!</h1>
-                <p class="text-gray-600">You're successfully logged in with GitHub</p>
+<div class="max-w-4xl mx-auto mt-8">
+    <div class="glass-effect rounded-2xl shadow-2xl p-8 card-hover">
+        <!-- Hamburger Menu for Home Page -->
+        <div class="flex justify-end mb-4">
+            <div class="relative">
+                <button onclick="togglePageMenu()" class="focus:outline-none p-2 rounded-lg hover:bg-gray-700 transition-colors hamburger-page-icon">
+                    <div class="w-6 h-6 flex flex-col justify-center space-y-1.5">
+                        <span class="block w-6 h-0.5 bg-blue-400 rounded-full"></span>
+                        <span class="block w-6 h-0.5 bg-blue-400 rounded-full"></span>
+                        <span class="block w-6 h-0.5 bg-blue-400 rounded-full"></span>
+                    </div>
+                </button>
+
+                <div id="page-menu" class="menu-fade absolute right-0 top-full mt-2 w-56 rounded-lg shadow-2xl glass-effect overflow-hidden z-50">
+                    <div class="py-2">
+                        <a href="{% url 'profile' %}" class="block px-4 py-3 text-sm text-gray-200 hover:bg-blue-600 hover:bg-opacity-20 transition-colors">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-3 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                                View Profile
+                            </div>
+                        </a>
+                        <a href="{% url 'repositories' %}" class="block px-4 py-3 text-sm text-gray-200 hover:bg-blue-600 hover:bg-opacity-20 transition-colors">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-3 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                                </svg>
+                                View Repositories
+                            </div>
+                        </a>
+                        <a href="{% url 'login' %}" class="block px-4 py-3 text-sm text-gray-200 hover:bg-blue-600 hover:bg-opacity-20 transition-colors">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-3 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                                Search Users
+                            </div>
+                        </a>
+                        <div class="border-t border-gray-700 my-2"></div>
+                        <a href="{% url 'logout' %}" class="block px-4 py-3 text-sm text-red-400 hover:bg-red-600 hover:bg-opacity-20 transition-colors">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                </svg>
+                                Logout
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="border-t pt-4">
-            <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
-            <div class="grid grid-cols-2 gap-4">
-                <a href="{% url 'profile' %}" class="bg-gray-100 hover:bg-gray-200 p-4 rounded-lg text-center transition-colors">
-                    <span class="block font-medium">View Profile</span>
+        <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6 mb-8">
+            {% if user.social_auth.first.extra_data.avatar_url %}
+                <img src="{{ user.social_auth.first.extra_data.avatar_url }}"
+                     alt="Profile"
+                     class="w-24 h-24 rounded-full border-4 border-blue-500 shadow-lg">
+            {% endif %}
+            <div class="text-center md:text-left">
+                <h1 class="text-4xl font-bold text-white mb-2">
+                    Welcome back, <span class="gradient-text">{{ user.username }}</span>!
+                </h1>
+                <p class="text-gray-400 text-lg">You're successfully logged in with GitHub</p>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-700 pt-6">
+            <h2 class="text-2xl font-semibold text-white mb-6">Quick Actions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <a href="{% url 'profile' %}" class="stat-card p-6 rounded-xl text-center group">
+                    <div class="flex flex-col items-center">
+                        <svg class="w-12 h-12 text-blue-400 mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        <span class="block font-semibold text-lg text-white">View Profile</span>
+                        <span class="text-gray-400 text-sm mt-1">Check your GitHub profile</span>
+                    </div>
                 </a>
-                <a href="{% url 'repositories' %}" class="bg-gray-100 hover:bg-gray-200 p-4 rounded-lg text-center transition-colors">
-                    <span class="block font-medium">View Repositories</span>
+                <a href="{% url 'repositories' %}" class="stat-card p-6 rounded-xl text-center group">
+                    <div class="flex flex-col items-center">
+                        <svg class="w-12 h-12 text-blue-400 mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                        </svg>
+                        <span class="block font-semibold text-lg text-white">View Repositories</span>
+                        <span class="text-gray-400 text-sm mt-1">Browse your repos</span>
+                    </div>
                 </a>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+function togglePageMenu() {
+    const menu = document.getElementById('page-menu');
+    const icon = document.querySelector('.hamburger-page-icon');
+
+    icon.classList.toggle('active');
+    menu.classList.toggle('active');
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', function(event) {
+    const menu = document.getElementById('page-menu');
+    const button = document.querySelector('.hamburger-page-icon');
+
+    if (!menu || !button) return;
+
+    const isClickInside = menu.contains(event.target) || button.contains(event.target);
+
+    if (!isClickInside && menu.classList.contains('active')) {
+        button.classList.remove('active');
+        menu.classList.remove('active');
+    }
+});
+</script>
 {% endblock %}
