@@ -1,6 +1,6 @@
 # GitGauge
 
-A project that aims to … _(brief description of what the project does)_  
+A project that aims to skyrocket your career_  
 
 ## Table of Contents  
 - [Technologies & Languages](#technologies--languages)  
